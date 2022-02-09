@@ -1,2 +1,2 @@
-import DmPdfViewer from '@/components/DmPdfViewer.vue'
+import DmPdfViewer from './components/DmPdfViewer.vue'
 export default DmPdfViewer
