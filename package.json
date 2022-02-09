@@ -5,6 +5,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --target lib --name DmPdfViewer src/main.js"
   },
+  "main": "src/main.js",
   "dependencies": {
     "core-js": "^3.6.5",
     "pdfjs-dist": "^2.12.313",
