@@ -134,13 +134,14 @@ export default {
       const calcScale = (pdfWraper.offsetWidth * 0.59)/373
 
       if (this.scale > calcScale || this.scale < calcScale) {
-        this.scale = calcScale
-        if (this.scale >= 2) {
+        if (pdfWraper.offsetWidth < 1200 && pdfWraper.offsetWidth > 768) {
+          this.scale = calcScale
+        } else {
           this.scale = 1.5
-          for (let i = 1; i <= this.pdfViewer.numPages; i++) {
-            const page = await this.pdfViewer.getPage(i)
-            await this.zoomRenderPage(page, this.scale)
-          }
+        }
+        for (let i = 1; i <= this.pdfViewer.numPages; i++) {
+          const page = await this.pdfViewer.getPage(i)
+          await this.zoomRenderPage(page, this.scale)
         }
       }
     },
