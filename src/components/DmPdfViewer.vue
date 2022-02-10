@@ -137,7 +137,7 @@ export default {
 
       if (this.scale > calcScale || this.scale < calcScale) {
         if (pdfWraper.offsetWidth < 1200 && pdfWraper.offsetWidth > 768) {
-          this.scale = calcScale
+          this.scale = calcScale  + 1
         } else {
           this.scale = 1.5
         }
@@ -191,7 +191,7 @@ export default {
       if (pdfWraper.offsetWidth < 768) {
         scale = 2.3
       } else if (pdfWraper.offsetWidth < 1200 && pdfWraper.offsetWidth > 768) {
-        scale = (pdfWraper.offsetWidth * 0.59)/373
+        scale = (pdfWraper.offsetWidth * 0.59)/373 + 1
       } else {
         scale = 1.6
       }
@@ -393,6 +393,7 @@ export default {
         display: block;
         box-shadow: 0px 0px 12px 0px rgba(51, 51, 61, 0.08);
         margin: 0 auto;
+        width: 100% !important;
         @media (max-width: 768px) {
           width: 100% !important;
         }
