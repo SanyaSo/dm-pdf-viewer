@@ -248,8 +248,8 @@ export default {
       a.href = this.url
       a.download = this.name
       a.click()
-      a.remove()
-      setTimeout(() => window.URL.revokeObjectURL(this.url), 100)
+      // a.remove()
+      // setTimeout(() => window.URL.revokeObjectURL(this.url), 100)
     }
   }
 }
