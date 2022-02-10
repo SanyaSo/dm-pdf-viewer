@@ -43,7 +43,8 @@
             src="@/assets/icons/print.svg"
           />
           <span
-            @click="downloadPdf && download"
+            v-if="download"
+            @click="downloadPdf"
             :style="{color: toolbarItemColor}"
             class="header-toolbar__item header-toolbar__icon_download"
           />
@@ -53,6 +54,7 @@
     <div
       class="viewer-content"
       id="pdf-document-content"
+      :style="{background: backgroundColor}"
     >
       <pinch-zoom
         disable-zoom-control="disable"
