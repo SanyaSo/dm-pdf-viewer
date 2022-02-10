@@ -65,6 +65,7 @@
         <div class="pdf-canvas-wraper" id="pdf-canvas-wraper" />
       </pinch-zoom>
     </div>
+    <div v-if="footer" class="viewer-footer"/>
   </div>
 </template>
 
@@ -102,6 +103,10 @@ export default {
     fullscreen: {
       type: Boolean,
       default: true
+    },
+    footer: {
+      type: Boolean,
+      default: false
     },
     backgroundColor: {
       type: String,
@@ -386,7 +391,7 @@ export default {
   .viewer-content {
     width: 100%;
     height: 100%;
-    overflow: scroll;
+    overflow-y: scroll;
     border-radius: 0px 0px 12px 12px;
     .pdf-canvas-wraper {
       .pdf-canvas {
@@ -398,6 +403,17 @@ export default {
           width: 100% !important;
         }
       }
+    }
+  }
+  .viewer-footer {
+    background: #fff;
+    box-shadow: 0px 0px 12px 0px rgba(51, 51, 61, 0.08);
+    border-radius: 0 0 12px 12px;
+    height: 56px;
+    position: relative;
+    z-index: 20;
+    @media (max-width: 768px) {
+      height: 50px;
     }
   }
 }
