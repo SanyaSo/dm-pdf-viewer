@@ -88,6 +88,10 @@ export default {
       type: String,
       default: ''
     },
+    downloadUrl: {
+      type: String,
+      default: ''
+    },
     zoom: {
       type: Boolean,
       default: true
@@ -250,7 +254,7 @@ export default {
     },
     downloadPdf () {
       const a = document.createElement('a')
-      a.href = this.url
+      a.href = this.downloadUrl ? this.downloadUrl : this.url
       a.download = this.name
       a.click()
       // a.remove()
