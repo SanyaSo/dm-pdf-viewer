@@ -10,11 +10,16 @@
                     <span> {{ name }} </span>
                 </div>
                 <div class="header-toolbar__items">
-          <span
-              class="header-toolbar__item header-toolbar__icon_fullscreen header-toolbar__icon_desktop"
-              v-if="!isFullScreen && fullscreen"
-              :style="{color: toolbarItemColor}"
-              @click="openFullScreen"/>
+                    <span
+                        v-if="!isEdit && edit"
+                        @click="editFile"
+                        :style="{color: toolbarItemColor}"
+                        class="header-toolbar__item header-toolbar__icon_zoomIn"/>
+                    <span
+                        class="header-toolbar__item header-toolbar__icon_fullscreen header-toolbar__icon_desktop"
+                        v-if="!isFullScreen && fullscreen"
+                        :style="{color: toolbarItemColor}"
+                        @click="openFullScreen"/>
                     <span
                         v-if="isFullScreen && fullscreen"
                         @click="closeFullScreen"
@@ -84,6 +89,8 @@
                 type: String,
                 default: ''
             },
+            template: {},
+            file: {},
             url: {
                 type: String,
                 default: ''
@@ -131,6 +138,10 @@
             toolbarItemColor: {
                 type: String,
                 default: '#5956e0'
+            },
+            edit: {
+                type: Boolean,
+                default: true
             }
         },
         data() {
@@ -139,7 +150,8 @@
                 scale: 1,
                 isFullScreen: false,
                 isImportPrintJs: false,
-                downloadButtonsVisible: false
+                downloadButtonsVisible: false,
+                isEdit: false
             }
         },
         mounted() {
@@ -273,6 +285,17 @@
             },
             downloadOrig() {
                 this.$emit("download-orig", this.filePath);
+            },
+            editFile() {
+                let route = this.$router.resolve({
+                    path: `/onlyoffice/${this.template.id}`, query: {
+                        mode: 'edit',
+                        index: 0,
+                        digest: this.file.digest,
+                        docType: 'main'
+                    }
+                });
+                window.open(route.href, '_blank');
             }
         }
     }
@@ -412,6 +435,20 @@
                         mask-size: cover;
                         -webkit-mask-position: 50% 50%;
                         mask-position: 50% 50%;
+                        background: currentColor;
+                        display: inline-block;
+                    }
+
+                    &_edit {
+                        -webkit-mask-image: url('../assets/icons/edit.svg');
+                        mask-image: url('../assets/icons/edit.svg');
+                        width: 18px;
+                        height: 18px;
+                        -webkit-mask-size: cover;
+                        mask-size: cover;
+                        -webkit-mask-position: 50% 50%;
+                        mask-position: 50% 50%;
+                        margin-right: 1rem;
                         background: currentColor;
                         display: inline-block;
                     }
