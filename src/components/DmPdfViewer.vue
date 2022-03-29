@@ -14,7 +14,7 @@
                         v-if="!isEdit && edit"
                         @click="editFile"
                         :style="{color: toolbarItemColor}"
-                        class="header-toolbar__item header-toolbar__icon_zoomIn"/>
+                        class="header-toolbar__item header-toolbar__icon_edit"/>
                     <span
                         class="header-toolbar__item header-toolbar__icon_fullscreen header-toolbar__icon_desktop"
                         v-if="!isFullScreen && fullscreen"
@@ -89,7 +89,22 @@
                 type: String,
                 default: ''
             },
-            template: {},
+            docId: {
+                type: String,
+                default: null
+            },
+            fileIndex: {
+                type: [String, Number],
+                default: 0
+            },
+            docFile: {
+                type: Object,
+                default: null
+            },
+            docName: {
+                type: String,
+                default: null
+            },
             file: {},
             url: {
                 type: String,
@@ -141,7 +156,7 @@
             },
             edit: {
                 type: Boolean,
-                default: true
+                default: false
             }
         },
         data() {
@@ -161,6 +176,9 @@
             import('print-js').then(() => {
                 this.isImportPrintJs = true
             })
+            if (!this.includesOneOf(this.docName.toLowerCase())) {
+                this.isEdit = true
+            }
         },
         methods: {
             async onPdfFullScreenChange(event) {
@@ -287,16 +305,33 @@
                 this.$emit("download-orig", this.filePath);
             },
             editFile() {
+                let docType = 'main';
+                let docId = this.docId;
+                let index = this.fileIndex;
+                let docFile = this.docFile;
+
+                if (this.docFile.path.includes('files:files')) {
+                    docType = 'attachment';
+                    index = index - 1;
+                }
+
+                let digest = docFile.digest
+
                 let route = this.$router.resolve({
-                    path: `/onlyoffice/${this.template.id}`, query: {
+                    path: `/onlyoffice/${docId}`, query: {
                         mode: 'edit',
-                        index: 0,
-                        digest: this.file.digest,
-                        docType: 'main'
+                        index: index,
+                        digest: digest,
+                        docType: docType
                     }
                 });
+
                 window.open(route.href, '_blank');
-            }
+            },
+            includesOneOf(val) {
+                let arrayOfVal = ['doc','pptx','xls','txt'];
+                return arrayOfVal.some(str => val.includes(str));
+            },
         }
     }
 </script>
@@ -442,8 +477,8 @@
                     &_edit {
                         -webkit-mask-image: url('../assets/icons/edit.svg');
                         mask-image: url('../assets/icons/edit.svg');
-                        width: 18px;
-                        height: 18px;
+                        width: 21px;
+                        height: 21px;
                         -webkit-mask-size: cover;
                         mask-size: cover;
                         -webkit-mask-position: 50% 50%;
