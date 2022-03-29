@@ -7,7 +7,7 @@
         <div class="viewer-header">
             <div class="header-toolbar">
                 <div class="header-toolbar__name">
-                    <span> {{ name }} </span>
+                    <span> {{ pdfName }} </span>
                 </div>
                 <div class="header-toolbar__items">
                     <span
@@ -101,10 +101,6 @@
                 type: Object,
                 default: null
             },
-            docName: {
-                type: String,
-                default: null
-            },
             file: {},
             url: {
                 type: String,
@@ -168,6 +164,11 @@
                 downloadButtonsVisible: false,
                 isEdit: false
             }
+        },
+        computed: {
+            pdfName() {
+                return this.name ? this.name?.split('.').slice(0, -1).join('.') : null;
+            },
         },
         mounted() {
             if (this.url) {
