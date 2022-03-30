@@ -177,7 +177,7 @@
             import('print-js').then(() => {
                 this.isImportPrintJs = true
             })
-            if (!this.includesOneOf(this.docName.toLowerCase())) {
+            if (!this.includesOneOf(this.name.toLowerCase())) {
                 this.isEdit = true
             }
         },
