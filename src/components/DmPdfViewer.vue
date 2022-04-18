@@ -54,6 +54,9 @@
                     <div v-if="downloadButtonsVisible" class="download_btns">
                         <span @click="downloadOrig">{{ downloadOrigTitle }}</span>
                         <span @click="downloadPdf">{{ downloadPdfTitle }}</span>
+                        <span v-if= "printVersion"
+                              @click="downloadPrintVersion">{{ downloadPrintVersionTitle }}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -89,6 +92,10 @@
                 type: String,
                 default: ''
             },
+            printVersionName: {
+                type: String,
+                default: ''
+            },
             docId: {
                 type: String,
                 default: null
@@ -106,6 +113,14 @@
                 type: String,
                 default: ''
             },
+            printVersionUrl: {
+                type: String,
+                default: ''
+            },
+            printVersion: {
+                type: Boolean,
+                default: false
+            },
             filePath: {
                 type: String,
                 default: ''
@@ -121,6 +136,10 @@
             downloadPdfTitle: {
                 type: String,
                 default: 'Download as PDF'
+            },
+            downloadPrintVersionTitle: {
+              type: String,
+              default: 'Download Print Version'
             },
             zoom: {
                 type: Boolean,
@@ -300,6 +319,12 @@
                 const a = document.createElement('a')
                 a.href = this.url
                 a.download = this.name
+                a.click()
+            },
+            downloadPrintVersion() {
+                const a = document.createElement('a')
+                a.href = this.printVersionUrl
+                a.download = this.printVersionName
                 a.click()
             },
             downloadOrig() {
