@@ -10,7 +10,7 @@
                     <span> {{ pdfName }} </span>
                 </div>
                 <div class="header-toolbar__items">
-                    <slot name="actions" :context="context">
+                    <slot name="actions">
                         <span
                             v-if="!isEdit && edit"
                             @click="editFile"
@@ -187,17 +187,13 @@
                 isFullScreen: false,
                 isImportPrintJs: false,
                 downloadButtonsVisible: false,
-                isEdit: false,
-                context: null
+                isEdit: false
             }
         },
         computed: {
             pdfName() {
                 return this.name ? this.name?.split('.').slice(0, -1).join('.') : null;
             },
-        },
-        created() {
-            this.context = this;
         },
         mounted() {
             if (this.url) {
