@@ -10,54 +10,56 @@
                     <span> {{ pdfName }} </span>
                 </div>
                 <div class="header-toolbar__items">
-                    <span
-                        v-if="!isEdit && edit"
-                        @click="editFile"
-                        :style="{color: toolbarItemColor}"
-                        class="header-toolbar__item header-toolbar__icon_edit"/>
-                    <span
-                        class="header-toolbar__item header-toolbar__icon_fullscreen header-toolbar__icon_desktop"
-                        v-if="!isFullScreen && fullscreen"
-                        :style="{color: toolbarItemColor}"
-                        @click="openFullScreen"/>
-                    <span
-                        v-if="isFullScreen && fullscreen"
-                        @click="closeFullScreen"
-                        :style="{color: toolbarItemColor}"
-                        class="header-toolbar__item header-toolbar__icon_fullscreen-exit header-toolbar__icon_desktop"/>
-                    <span
-                        v-if="isFullScreen && zoom"
-                        :style="{color: toolbarItemColor}"
-                        class="header-toolbar__item header-toolbar__icon_zoomIn"
-                        @click="zoomIn"/>
-                    <span
-                        v-if="isFullScreen && zoom"
-                        :style="{color: toolbarItemColor}"
-                        class="header-toolbar__item header-toolbar__icon_zoomOut"
-                        @click="zoomOut"/>
-                    <span
-                        v-if="isImportPrintJs && print"
-                        @click="printPdf"
-                        :style="{color: toolbarItemColor}"
-                        class="header-toolbar__item header-toolbar__icon_print header-toolbar__icon_desktop"
-                        src="@/assets/icons/print.svg"/>
-                    <span
-                        v-if="download && !selectiveDownload"
-                        @click="downloadPdf"
-                        :style="{color: toolbarItemColor}"
-                        class="header-toolbar__item header-toolbar__icon_download"/>
-                    <span
-                        v-if="download && selectiveDownload"
-                        @click="downloadButtonsVisible = !downloadButtonsVisible"
-                        :style="{color: toolbarItemColor}"
-                        class="header-toolbar__item header-toolbar__icon_download"/>
-                    <div v-if="downloadButtonsVisible" class="download_btns">
-                        <span @click="downloadOrig">{{ downloadOrigTitle }}</span>
-                        <span @click="downloadPdf">{{ downloadPdfTitle }}</span>
-                        <span v-if= "printVersion"
-                              @click="downloadPrintVersion">{{ downloadPrintVersionTitle }}
-                        </span>
-                    </div>
+                    <slot name="actions" :context="context">
+                        <span
+                            v-if="!isEdit && edit"
+                            @click="editFile"
+                            :style="{color: toolbarItemColor}"
+                            class="header-toolbar__item header-toolbar__icon_edit"/>
+                        <span
+                            class="header-toolbar__item header-toolbar__icon_fullscreen header-toolbar__icon_desktop"
+                            v-if="!isFullScreen && fullscreen"
+                            :style="{color: toolbarItemColor}"
+                            @click="openFullScreen"/>
+                        <span
+                            v-if="isFullScreen && fullscreen"
+                            @click="closeFullScreen"
+                            :style="{color: toolbarItemColor}"
+                            class="header-toolbar__item header-toolbar__icon_fullscreen-exit header-toolbar__icon_desktop"/>
+                        <span
+                            v-if="isFullScreen && zoom"
+                            :style="{color: toolbarItemColor}"
+                            class="header-toolbar__item header-toolbar__icon_zoomIn"
+                            @click="zoomIn"/>
+                        <span
+                            v-if="isFullScreen && zoom"
+                            :style="{color: toolbarItemColor}"
+                            class="header-toolbar__item header-toolbar__icon_zoomOut"
+                            @click="zoomOut"/>
+                        <span
+                            v-if="isImportPrintJs && print"
+                            @click="printPdf"
+                            :style="{color: toolbarItemColor}"
+                            class="header-toolbar__item header-toolbar__icon_print header-toolbar__icon_desktop"
+                            src="@/assets/icons/print.svg"/>
+                        <span
+                            v-if="download && !selectiveDownload"
+                            @click="downloadPdf"
+                            :style="{color: toolbarItemColor}"
+                            class="header-toolbar__item header-toolbar__icon_download"/>
+                        <span
+                            v-if="download && selectiveDownload"
+                            @click="downloadButtonsVisible = !downloadButtonsVisible"
+                            :style="{color: toolbarItemColor}"
+                            class="header-toolbar__item header-toolbar__icon_download"/>
+                        <div v-if="downloadButtonsVisible" class="download_btns">
+                            <span @click="downloadOrig">{{ downloadOrigTitle }}</span>
+                            <span @click="downloadPdf">{{ downloadPdfTitle }}</span>
+                            <span v-if= "printVersion"
+                                @click="downloadPrintVersion">{{ downloadPrintVersionTitle }}
+                            </span>
+                        </div>
+                    </slot>
                 </div>
             </div>
         </div>
@@ -172,6 +174,10 @@
             edit: {
                 type: Boolean,
                 default: false
+            },
+            customAction: {
+                type: Function,
+                default: null
             }
         },
         data() {
@@ -181,13 +187,17 @@
                 isFullScreen: false,
                 isImportPrintJs: false,
                 downloadButtonsVisible: false,
-                isEdit: false
+                isEdit: false,
+                context: null
             }
         },
         computed: {
             pdfName() {
                 return this.name ? this.name?.split('.').slice(0, -1).join('.') : null;
             },
+        },
+        created() {
+            this.context = this;
         },
         mounted() {
             if (this.url) {
@@ -322,10 +332,14 @@
                 a.click()
             },
             downloadPrintVersion() {
-                const a = document.createElement('a')
-                a.href = this.printVersionUrl
-                a.download = this.printVersionName
-                a.click()
+                if (this.customAction) {
+                    this.customAction()
+                } else {
+                    const a = document.createElement('a')
+                    a.href = this.printVersionUrl
+                    a.download = this.printVersionName
+                    a.click()
+                }
             },
             downloadOrig() {
                 this.$emit("download-orig", this.filePath);
