@@ -2,7 +2,7 @@
     <div
         @webkitfullscreenchange="onPdfFullScreenChange"
         @fullscreenchange="onPdfFullScreenChange"
-        id="pdf-document"
+        :id="pdfViewerId"
         class="pdf-document">
         <div class="viewer-header">
             <div class="header-toolbar">
@@ -65,14 +65,14 @@
         </div>
         <div
             class="viewer-content"
-            id="pdf-document-content"
+            :id="pdfViewerContentId"
             :style="{background: backgroundColor}">
             <pinch-zoom
                 disable-zoom-control="disable"
                 :background-color="backgroundColor"
                 :wheel="false"
                 overflow="visible">
-                <div class="pdf-canvas-wraper" id="pdf-canvas-wraper"/>
+                <div class="pdf-canvas-wrapper" :id="pdfViewerCanvasWrapperId"/>
             </pinch-zoom>
         </div>
         <div v-if="footer" class="viewer-footer"/>
@@ -93,6 +93,10 @@
             name: {
                 type: String,
                 default: ''
+            },
+            pdfViewerId: {
+                type: String,
+                required: true
             },
             printVersionName: {
                 type: String,
@@ -194,6 +198,12 @@
             pdfName() {
                 return this.name ? this.name?.split('.').slice(0, -1).join('.') : null;
             },
+            pdfViewerContentId() {
+                return this.pdfViewerId + '-content'
+            },
+            pdfViewerCanvasWrapperId(){
+                return this.pdfViewerId + '-canvas-wrapper'
+            }
         },
         mounted() {
             if (this.url) {
@@ -206,11 +216,19 @@
                 this.isEdit = true
             }
         },
+        watch: {
+          pdfViewer: {
+              handler(val) {
+                  console.log(val)
+              },
+              deep: true
+          }
+        },
         methods: {
             async onPdfFullScreenChange(event) {
                 this.isFullScreen = document.fullscreenElement !== null
                 this.isFullScreen = document.webkitFullscreenElement !== null
-                const pdfWraper = document.getElementById('pdf-document-content')
+                const pdfWraper = document.getElementById(this.pdfViewerContentId)
                 const calcScale = (pdfWraper.offsetWidth * 0.59) / 373
 
                 if (this.scale > calcScale || this.scale < calcScale) {
@@ -233,7 +251,7 @@
                 await this.renderAllPage(pdf)
             },
             async renderPage(page, scale) {
-                const wrapper = document.getElementById('pdf-canvas-wraper')
+                const wrapper = document.getElementById(this.pdfViewerCanvasWrapperId)
                 const canvas = document.createElement('canvas')
                 canvas.classList.toggle('pdf-canvas')
                 const context = canvas.getContext('2d')
@@ -249,7 +267,7 @@
                 await page.render(renderContext)
             },
             async zoomRenderPage(page, scale) {
-                const wrapper = document.getElementById('pdf-canvas-wraper')
+                const wrapper = document.getElementById(this.pdfViewerCanvasWrapperId)
                 const canvas = document.querySelector('.pdf-canvas')
                 const context = canvas.getContext('2d')
                 context.clearRect(0, 0, canvas.width, canvas.height)
@@ -264,12 +282,12 @@
                 await page.render(renderContext)
             },
             async renderAllPage(pdf) {
-                const pdfWraper = document.getElementById('pdf-document-content')
+                const pdfWrapper = document.getElementById(this.pdfViewerContentId)
                 let scale
-                if (pdfWraper.offsetWidth < 768) {
+                if (pdfWrapper.offsetWidth < 768) {
                     scale = 2.3
-                } else if (pdfWraper.offsetWidth < 1200 && pdfWraper.offsetWidth > 768) {
-                    scale = (pdfWraper.offsetWidth * 0.59) / 373 + 1
+                } else if (pdfWrapper.offsetWidth < 1200 && pdfWrapper.offsetWidth > 768) {
+                    scale = (pdfWrapper.offsetWidth * 0.59) / 373 + 1
                 } else {
                     scale = 1.6
                 }
@@ -300,7 +318,8 @@
                 }
             },
             openFullScreen() {
-                const pdf = document.getElementById('pdf-document')
+                const pdf = this.$el
+
                 if (pdf.requestFullscreen) {
                     pdf.requestFullscreen()
                 } else if (pdf.webkitRequestFullscreen) {
@@ -548,7 +567,7 @@
             overflow-y: scroll;
             border-radius: 0px 0px 12px 12px;
 
-            .pdf-canvas-wraper {
+            .pdf-canvas-wrapper {
                 .pdf-canvas {
                     display: block;
                     box-shadow: 0px 0px 12px 0px rgba(51, 51, 61, 0.08);
