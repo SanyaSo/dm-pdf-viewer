@@ -1,6 +1,7 @@
 <template>
     <div id="app" class="app">
-        <dm-pdf-viewer :name="'document'" :footer="true" :url="'./docs.pdf'"/>
+        <dm-pdf-viewer name="document" pdf-viewer-id="first" footer url="doc.pdf"/>
+        <dm-pdf-viewer name="document" pdf-viewer-id="second" footer url="doc.pdf"/>
     </div>
 </template>
 
@@ -15,7 +16,8 @@ import DmPdfViewer from './DmPdfViewer.vue'
 <style scoped>
 .app {
     margin: 0 auto;
-    width: 50vw;
-    height: 60vh;
+    /*width: 50vw;*/
+    /*height: 60vh;*/
+    display: flex;
 }
 </style>
