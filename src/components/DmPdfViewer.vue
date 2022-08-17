@@ -7,7 +7,7 @@
         <div class="viewer-header">
             <div class="header-toolbar">
                 <div class="header-toolbar__name">
-                    <span> {{ pdfName }} </span>
+                    <span :title="nameTitle ? pdfName : ''"> {{ pdfName }} </span>
                 </div>
                 <div class="header-toolbar__items">
                     <slot name="actions">
@@ -93,6 +93,10 @@
             name: {
                 type: String,
                 default: ''
+            },
+            nameTitle: {
+                type: Boolean,
+                default: false
             },
             pdfViewerId: {
                 type: String,
@@ -219,14 +223,6 @@
             if (!this.includesOneOf(this.name.toLowerCase())) {
                 this.isEdit = true
             }
-        },
-        watch: {
-          pdfViewer: {
-              handler(val) {
-                  console.log(val)
-              },
-              deep: true
-          }
         },
         methods: {
             async onPdfFullScreenChange(event) {
