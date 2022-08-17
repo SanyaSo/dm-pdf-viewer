@@ -119,6 +119,10 @@
                 type: String,
                 default: ''
             },
+            pdfVersionUrl: {
+              type: String,
+              default: ''
+            },
             printVersionUrl: {
                 type: String,
                 default: ''
@@ -342,7 +346,7 @@
             },
             downloadPdf() {
                 const a = document.createElement('a')
-                a.href = this.url
+                a.href = this.pdfVersionUrl
                 a.download = this.name
                 a.click()
             },
