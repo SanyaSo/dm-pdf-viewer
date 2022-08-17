@@ -343,7 +343,7 @@
             downloadPdf() {
                 const a = document.createElement('a')
                 a.href = this.pdfVersionUrl
-                a.download = `${this.name}.pdf`
+                a.download = `${this.name.split('.')[0]}.pdf`
                 a.click()
             },
             downloadPrintVersion() {
