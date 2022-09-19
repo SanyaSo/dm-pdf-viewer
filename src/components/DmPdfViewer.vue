@@ -81,10 +81,10 @@
 
 <script>
     import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf";
-    // import PDFJSWorker from 'pdfjs-dist/legacy/build/pdf.worker.entry'
+    import PDFJSWorker from 'pdfjs-dist/legacy/build/pdf.worker.entry'
     import PinchZoom from 'vue-pinch-zoom'
 
-    // pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJSWorker
+    pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJSWorker
     export default {
         components: {
             PinchZoom

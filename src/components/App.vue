@@ -1,7 +1,6 @@
 <template>
     <div id="app" class="app">
-        <dm-pdf-viewer name="document" pdf-viewer-id="first" footer url="doc.pdf"/>
-        <dm-pdf-viewer name="document" pdf-viewer-id="second" footer url="doc.pdf"/>
+        <dm-pdf-viewer name="document" pdf-viewer-id="first" footer url="/Сертификат (10).pdf"/>
     </div>
 </template>
 
