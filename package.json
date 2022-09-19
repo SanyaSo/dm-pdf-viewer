@@ -1,9 +1,10 @@
 {
   "name": "dm-pdf-viewer",
-  "version": "1.2.20",
+  "version": "1.2.21",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --target lib --name DmPdfViewer src/main.js"
+    "build": "vue-cli-service build --target lib --name DmPdfViewer src/main.js",
+    "build-dev": "vue-cli-service build"
   },
   "main": "src/main.js",
   "dependencies": {
