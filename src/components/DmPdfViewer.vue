@@ -204,7 +204,7 @@
         },
         watch: {
             url() {
-                generatedPdfDocument(this.url);
+                this.generatedPdfDocument(this.url);
             }
         },
         computed: {
