@@ -202,6 +202,11 @@
                 isEdit: false
             }
         },
+        watch: {
+            url() {
+                generatedPdfDocument(this.url);
+            }
+        },
         computed: {
             pdfName() {
                 return this.name ? this.name?.split('.').slice(0, -1).join('.') : null;
